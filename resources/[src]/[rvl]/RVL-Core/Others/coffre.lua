@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
                 if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), coords, true) <= 1.5 then
                     if not inTrunk then
                         if GetVehicleDoorAngleRatio(vehicle, 5) < 0.9 then
-                            DrawText3D(coords, '[E] Se Cacher\n[L] Coffre')
+                            DrawText3D(coords, '[E] Se Cacher')
 								if IsControlJustReleased(0, 74)then
 									if lockStatus == 1 then --unlocked
 										SetCarBootOpen(vehicle)
@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
 									end
 								end
                         else
-                            DrawText3D(coords, '[E] Se Cacher\n[L] Coffre')
+                            DrawText3D(coords, '[E] Se Cacher')
                             if IsControlJustReleased(0, 74) then
                                 SetVehicleDoorShut(vehicle, 5)
                             end
