@@ -19,4 +19,27 @@ server_script {
 }
 
 
+loadscreen 'LoadScreen/html/index.html'
+
+files {
+	-- Load Index Page
+	'LoadScreen/html/index.html',
+	-- Load Bootstrap & Custom Styles
+	'LoadScreen/html/css/bootstrap.min.css',
+	'LoadScreen/html/css/custom.css',
+	'LoadScreen/html/css/morphext.css',
+	-- Load jQuery, Bootstrap and JavaScript 
+	'LoadScreen/html/js/jquery.min.js',
+	'LoadScreen/html/js/bootstrap.min.js',
+	'LoadScreen/html/js/popper.min.js',
+	'LoadScreen/html/js/app.js',
+	'LoadScreen/html/js/morphext.min.js',
+	-- Load Image Resources
+	'LoadScreen/html/img/logo.png',
+	'LoadScreen/html/img/back.png',
+	-- Load Audio Source
+	'LoadScreen/html/song.mp3'
+}
+
+
 
