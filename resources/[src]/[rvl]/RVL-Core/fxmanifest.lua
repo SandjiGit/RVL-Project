@@ -17,7 +17,6 @@ server_scripts {
 ----------------------------------------------------------
 
 -- Ressource: Identity
--- Source: Clippy
 
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
@@ -43,7 +42,6 @@ ui_page 'Identity/html/ui.html'
 ----------------------------------------------------------
 
 -- Ressource: Menu Personnel
--- Source: SLife
 
 client_scripts {
     "RageUI//RMenu.lua",
@@ -70,7 +68,6 @@ server_scripts {
 ----------------------------------------------------------
 
 -- Ressource: Others
--- Source: SLife
 
 client_scripts {
     'Others/divers.lua',
@@ -81,7 +78,6 @@ client_scripts {
 ----------------------------------------------------------
 
 -- Ressource: Admin
--- Source: SLife
 
 client_scripts {
     'Admin/config.lua',
@@ -95,7 +91,6 @@ server_scripts {
 
 ----------------------------------------------------------
 -- Ressource: Keys
--- Source: Auzeria
 
 
 shared_scripts {
@@ -108,4 +103,16 @@ client_scripts{
 
 server_scripts{
     "Vehicles/Keys/server/*.lua",
+}
+
+----------------------------------------------------------
+-- Ressource: Shops Vetements
+
+client_scripts {
+    "Shops/Vetements/client/*.lua",
+
+}
+
+server_scripts {
+    "Shops/Vetements/server/*.lua",
 }
