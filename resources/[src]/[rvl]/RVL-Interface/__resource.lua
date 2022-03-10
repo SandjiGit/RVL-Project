@@ -20,6 +20,7 @@ server_script {
 
 
 loadscreen 'LoadScreen/html/index.html'
+ui_page 'Hud/html/ui.html'
 
 files {
 	-- Load Index Page
@@ -39,6 +40,20 @@ files {
 	'LoadScreen/html/img/back.png',
 	-- Load Audio Source
 	'LoadScreen/html/song.mp3'
+}
+
+
+files {
+    'Hud/html/ui.html',
+    'Hud/html/script.js',
+    'Hud/html/style.css',
+    'Hud/html/loading-bar.js',
+}
+
+
+client_scripts {
+    'Hud/client.lua',
+    'Hud/config.lua'
 }
 
 
