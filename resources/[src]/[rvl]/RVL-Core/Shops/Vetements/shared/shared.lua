@@ -1,4 +1,4 @@
-Config = {
+Vetement = {
 
    MarkerType = 22, -- Pour voir les différents type de marker: https://docs.fivem.net/docs/game-references/markers/
    MarkerSizeLargeur = 0.3, -- Largeur du marker

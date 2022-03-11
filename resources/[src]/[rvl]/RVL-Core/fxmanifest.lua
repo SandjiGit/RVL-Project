@@ -116,3 +116,18 @@ client_scripts {
 server_scripts {
     "Shops/Vetements/server/*.lua",
 }
+
+shared_scripts {
+    "Shops/Vetements/shared/shared.lua"
+}
+
+----------------------------------------------------------
+-- Ressource: Shops Barber
+
+client_scripts {
+    "Shops/Barber/client/*.lua",
+}
+
+server_scripts {
+    "Shops/Barber/server/*.lua",
+}

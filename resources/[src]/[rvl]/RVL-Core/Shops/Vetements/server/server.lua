@@ -14,7 +14,7 @@ end)
 RegisterNetEvent("Vetement:Buy")
 AddEventHandler("Vetement:Buy", function()
     local xPlayer = ESX.GetPlayerFromId(source)
-    local price = 75
+    local price = 175
     if xPlayer.getMoney() >= price then
         xPlayer.removeMoney(price)  
         TriggerClientEvent('esx:showNotification', source,  "Vous avez payez ~g~"..price.."$")

@@ -1,19 +1,19 @@
 ESX = nil Citizen.CreateThread(function() while ESX == nil do TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)  Citizen.Wait(0) end end)
 
 local open = false
-local Main = RageUI.CreateMenu("Magasin", "Catégories")
-local dressing = RageUI.CreateSubMenu(Main,"ClotheShop", "Dressing")
-local dressing = RageUI.CreateSubMenu(Main,"ClotheShop", "Dressing")
-local eregister = RageUI.CreateSubMenu(Main, "ClotheShop", "Lunette")
-local tshirt = RageUI.CreateSubMenu(Main, "ClotheShop", "Tshirt")
-local torse = RageUI.CreateSubMenu(Main, "ClotheShop", "Torse")
-local pantalon = RageUI.CreateSubMenu(Main, "ClotheShop", "Pantalon")
-local chaussure = RageUI.CreateSubMenu(Main, "ClotheShop", "Chaussure")
-local bras = RageUI.CreateSubMenu(Main, "ClotheShop", "Bras")
-local chapeau = RageUI.CreateSubMenu(Main, "ClotheShop", "Chapeau")
-local chaine = RageUI.CreateSubMenu(Main, "ClotheShop", "Chaine")
-local lunette = RageUI.CreateSubMenu(Main, "ClotheShop", "Lunette")
-local sac = RageUI.CreateSubMenu(Main,"ClotheShop", "Sac")
+local Main = RageUI.CreateMenu("Magasin", "Categories")
+local dressing = RageUI.CreateSubMenu(Main,"Magasin", "Dressing")
+local dressing = RageUI.CreateSubMenu(Main,"Magasin", "Dressing")
+local eregister = RageUI.CreateSubMenu(Main, "Magasin", "Lunette")
+local tshirt = RageUI.CreateSubMenu(Main, "Magasin", "Tshirt")
+local torse = RageUI.CreateSubMenu(Main, "Magasin", "Torse")
+local pantalon = RageUI.CreateSubMenu(Main, "Magasin", "Pantalon")
+local chaussure = RageUI.CreateSubMenu(Main, "Magasin", "Chaussure")
+local bras = RageUI.CreateSubMenu(Main, "Magasin", "Bras")
+local chapeau = RageUI.CreateSubMenu(Main, "Magasin", "Chapeau")
+local chaine = RageUI.CreateSubMenu(Main, "Magasin", "Chaine")
+local lunette = RageUI.CreateSubMenu(Main, "Magasin", "Lunette")
+local sac = RageUI.CreateSubMenu(Main,"Magasin", "Sac")
 lunette.EnableMouse = true
 chaine.EnableMouse = true
 chapeau.EnableMouse = true
@@ -83,11 +83,8 @@ local SliderProgressChaine = 0
 local SliderProgressLunette = 0
 local SliderProgressSac = 0
 
-RegisterCommand("cloths", function()
-  OpenVetement()
-end)
-
 OpenVetement = function()
+    RageUI.CloseAll()
      if main then 
       main = false
          RageUI.Visible(Main, false)
@@ -104,54 +101,54 @@ OpenVetement = function()
                 end
               },dressing)
 
-              RageUI.Button("Catégories Tshirt",nil,{RightLabel = "→"},true,{
+              RageUI.Button("Catégorie: Tshirts",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },tshirt)
 
-            RageUI.Button("Catégories Sac",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Sacs",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },sac)
 
-            RageUI.Button("Catégories Torse",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Torses",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },torse)
 
-            RageUI.Button("Catégories Pantalon",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Pantalons",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },pantalon)
 
-            RageUI.Button("Catégories Chaussure",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Chaussures",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },chaussure)
 
-            RageUI.Button("Catégories Bras",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Bras",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },bras)
 
-            RageUI.Button("Catégories Chapeau",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Chapeaux",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },chapeau)
 
-            RageUI.Button("Catégories Chaine",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Chaines",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },chaine)
 
 
-            RageUI.Button("Catégories Lunette",nil,{RightLabel = "→"},true,{
+            RageUI.Button("Catégorie: Lunettes",nil,{RightLabel = "→"},true,{
               onSelected = function()
               end
             },lunette)
 
 
-            RageUI.Button("Valider et payer : ~g~75$" , "Prix du Shopping : ~g~75$", { Color = { BackgroundColor = { 0, 140, 0, 160 } } }, true, {
+            RageUI.Button("Valider et payer : ~g~175$" , "Prix du Shopping : ~g~175$", { Color = { BackgroundColor = { 0, 140, 0, 160 } } }, true, {
               onSelected = function()
                     end
                 },eregister)
@@ -308,13 +305,17 @@ end
                   TriggerEvent("skinchanger:change", "pants_1", SliderProgressPatanlon)
               end
           })
-  
-          RageUI.SliderProgress(Vetement.SliderPannelPatanlon.Index, 0, "Variations Couleur : "..Vetement.SliderPannelPatanlon.Index.."", 15, {  
-                    onSliderChange = function(Index)
-                      Vetement.SliderPannelPatanlon.Index = Index
-                      TriggerEvent("skinchanger:change", "pants_2", Vetement.SliderPannelPatanlon.Index)
-                  end
-              }, 1)
+          
+
+          RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelPatanlon.Index..'', Vetement.SliderPannelPatanlon.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelPatanlon.Index = Index
+              TriggerEvent("skinchanger:change", "pants_2", Vetement.SliderPannelPatanlon.Index)
+            end
+        })
   
 
           end)
@@ -331,14 +332,18 @@ end
           })
   
 
-          RageUI.SliderProgress(Vetement.SliderPannelChaussure.Index, 0, "Variations Couleur : "..Vetement.SliderPannelChaussure.Index.."", 15, {  
-                    onSliderChange = function(Index)
-                      Vetement.SliderPannelChaussure.Index = Index
-                      TriggerEvent("skinchanger:change", "shoes_2", Vetement.SliderPannelChaussure.Index)
-                  end
-              }, 1)
+          RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelChaussure.Index..'', Vetement.SliderPannelChaussure.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelChaussure.Index = Index
+              TriggerEvent("skinchanger:change", "shoes_2", Vetement.SliderPannelChaussure.Index)
+            end
+        })
 
           end)
+
 
           RageUI.IsVisible(bras,function()
 
@@ -365,13 +370,16 @@ end
                   TriggerEvent("skinchanger:change", "helmet_1", SliderProgressChapeau)
               end
           })
-  
-          RageUI.SliderProgress(Vetement.SliderPannelChapeau.Index, 0, "Variations Couleur : "..Vetement.SliderPannelChapeau.Index.."", 10, {  
-                    onSliderChange = function(Index)
-                      Vetement.SliderPannelChapeau.Index = Index
-                      TriggerEvent("skinchanger:change", "helmet_2", Vetement.SliderPannelChapeau.Index)
-                  end
-              }, 1)
+
+          RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelChapeau.Index..'', Vetement.SliderPannelChapeau.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelChapeau.Index = Index
+              TriggerEvent("skinchanger:change", "helmet_2", Vetement.SliderPannelChapeau.Index)
+            end
+        })
 
           end)
 
@@ -386,13 +394,16 @@ end
                   TriggerEvent("skinchanger:change", "chain_1", SliderProgressChaine)
               end
           })
-  
-          RageUI.SliderProgress(Vetement.SliderPannelChaine.Index, 0, "Variations Couleur : "..Vetement.SliderPannelChaine.Index.."", 5, {  
-                    onSliderChange = function(Index)
-                      Vetement.SliderPannelChaine.Index = Index
-                      TriggerEvent("skinchanger:change", "chain_2", Vetement.SliderPannelChaine.Index)
-                  end
-              }, 1)
+
+          RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelChaine.Index..'', Vetement.SliderPannelChaine.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelChaine.Index = Index
+              TriggerEvent("skinchanger:change", "chain_2", Vetement.SliderPannelChaine.Index)
+            end
+        })
           end)
 
           RageUI.IsVisible(lunette,function()
@@ -406,13 +417,16 @@ end
                   TriggerEvent("skinchanger:change", "glasses_1", SliderProgressLunette)
               end
           })
-  
-          RageUI.SliderProgress(Vetement.SliderPannelLunette.Index, 0, "Variations Couleur : "..Vetement.SliderPannelLunette.Index.."", 5, {  
-                    onSliderChange = function(Index)
-                      Vetement.SliderPannelLunette.Index = Index
-                      TriggerEvent("skinchanger:change", "glasses_2", Vetement.SliderPannelLunette.Index)
-                  end
-              }, 1)
+
+          RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelLunette.Index..'', Vetement.SliderPannelLunette.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelLunette.Index = Index
+              TriggerEvent("skinchanger:change", "glasses_2", Vetement.SliderPannelLunette.Index)
+            end
+        })
 
             end)
             RageUI.IsVisible(sac,function()
@@ -426,13 +440,16 @@ end
                     TriggerEvent("skinchanger:change", "bags_1", SliderProgressSac)
                 end
             })
-    
-            RageUI.SliderProgress(Vetement.SliderPannelSac.Index, 0, "Variations Couleur : "..Vetement.SliderPannelSac.Index.."", 5, {  
-                      onSliderChange = function(Index)
-                        Vetement.SliderPannelSac.Index = Index
-                        TriggerEvent("skinchanger:change", "bags_2", Vetement.SliderPannelSac.Index)
-                    end
-                }, 1)
+            
+            RageUI.SliderProgress('Variations Couleur : '..Vetement.SliderPannelSac.Index..'', Vetement.SliderPannelSac.Index, 289, false, {
+            ProgressBackgroundColor = { R = 255, G = 255, B = 255, A = 255 },
+            ProgressColor = { R = 3, G = 169, B = 96, A = 244 },
+        }, true, {
+            onSliderChange = function(Index)
+              Vetement.SliderPannelSac.Index = Index
+              TriggerEvent("skinchanger:change", "bags_2", Vetement.SliderPannelSac.Index)
+            end
+        })
 
 
 
