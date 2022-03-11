@@ -122,4 +122,17 @@ shared_scripts {
 }
 
 ----------------------------------------------------------
--- Ressource: Shops Barber
+-- Ressource: Bank
+
+client_scripts {
+    "Society/Bank/client/menu.lua",
+    "Society/Bank/client/coffre.lua",
+    "Society/Bank/client/accueil.lua",
+    "Society/Bank/client/patron.lua",
+    "Society/Bank/client/garage.lua",
+    "Society/Bank/client/bank.lua",
+}
+
+server_script {
+    "Society/Bank/server/server.lua",
+}
