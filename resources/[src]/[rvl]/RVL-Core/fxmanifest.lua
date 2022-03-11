@@ -124,10 +124,3 @@ shared_scripts {
 ----------------------------------------------------------
 -- Ressource: Shops Barber
 
-client_scripts {
-    "Shops/Barber/client/*.lua",
-}
-
-server_scripts {
-    "Shops/Barber/server/*.lua",
-}
