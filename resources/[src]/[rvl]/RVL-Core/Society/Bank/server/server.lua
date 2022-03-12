@@ -82,7 +82,7 @@ RegisterNetEvent('G_Banquier:cb')
 AddEventHandler('G_Banquier:cb', function()
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local money = xPlayer.getMoney()
-	local prix = 100
+	local prix = 0
 	if money >= prix then
 		xPlayer.removeMoney(prix)
 		xPlayer.addInventoryItem('cartebancaire', 1)
@@ -149,4 +149,56 @@ ESX.RegisterServerCallback('G_Bank:getItemAmount', function(source, cb, item)
     else
         cb(items.count)
     end
+end)
+
+RegisterServerEvent('RVL:bank_pin_redefine')
+AddEventHandler('RVL:bank_pin_redefine', function(pin2)
+	local xPlayer = ESX.GetPlayerFromId(source)
+  	if pin2 ~= nil then
+  		MySQL.Async.execute(
+			'UPDATE rvl_users_infos SET bank_pin = @pin WHERE identifier = @identifier',
+			{
+				['@identifier'] = xPlayer.identifier,
+				['@pin'] = pin2
+			}
+		)
+		TriggerClientEvent('esx:showNotification', source, "RVL | Options Joueurs Modifiés avec succès.")
+  	else
+  		TriggerClientEvent('esx:showNotification', source, "Une erreur est survenus, contacter le Développeur du Serveur (Sandji).")
+  	end
+
+end)
+
+RegisterServerEvent('RVL:bank_pin_set')
+AddEventHandler('RVL:bank_pin_set', function(pin)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    MySQL.Async.execute('INSERT INTO rvl_users_infos (identifier, bank_pin) VALUES (@identifier, @pin)', {
+        ['@identifier'] = xPlayer.identifier,
+        ['@pin'] = pin
+    }) 
+end)
+
+RegisterServerEvent('RVL:bank_pin_delete')
+AddEventHandler('RVL:bank_pin_delete', function()
+  	MySQL.Async.execute(
+		'DELETE FROM rvl_users_infos WHERE identifier = @identifier',{
+			['@identifier'] = xPlayer.identifier
+		})
+end)
+
+
+ESX.RegisterServerCallback('RVL:load_bank_infos', function(source, cb)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerbankinfos = {}
+    MySQL.Async.fetchAll('SELECT * FROM rvl_users_infos WHERE (identifier = @identifier)', {
+        ['@identifier'] = xPlayer.identifier
+    }, function(result)
+      for i = 1, #result, 1 do
+      table.insert(playerbankinfos, {
+      	pin = result[i].bank_pin
+      })
+    end
+    cb(playerbankinfos)
+
+    end)
 end)

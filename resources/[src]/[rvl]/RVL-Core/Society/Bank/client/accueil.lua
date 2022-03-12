@@ -1,7 +1,15 @@
 local accueil = false 
 local mainMenu = RageUI.CreateMenu('Accueil', 'MENU')
-local subMenu = RageUI.CreateSubMenu(mainMenu, 'Prise de Rendez-vous', 'MENU')
+local subMenu = RageUI.CreateSubMenu(mainMenu, 'Rendez-vous', 'MENU')
+local subMenu2 = RageUI.CreateSubMenu(mainMenu, "Carte Bancaire", "MENU")
 mainMenu.Closed = function() accueil = false end
+
+local PlayerInfos = {
+    infos = {
+      list = {},
+        playerbankinfos = {};
+    },
+}
 
 function Accueil()
 	if accueil then accueil = false RageUI.Visible(mainMenu, false) return else accueil = true RageUI.Visible(mainMenu, true)
@@ -15,8 +23,59 @@ function Accueil()
                             ESX.ShowNotification("Votre appel est bien passé")
 				        end
 			        })
-                    RageUI.Button("Acheter une carte bancaire", nil, {RightLabel = "→"}, true, {onSelected = function() TriggerServerEvent('G_Banquier:cb') end})
+                    ESX.TriggerServerCallback('RVL:load_bank_infos', function(playerbankinfos)
+                        PlayerInfos.infos.list = playerbankinfos
+                    end)
+                    for i = 1, #PlayerInfos.infos.list, 1 do
+                        ESX.ShowNotification(PlayerInfos.infos.list[i].pin)
+                    if PlayerInfos.infos.list[i].pin == nil then
+                        RageUI.Button("Acheter une carte bancaire", nil, {RightLabel = "→"}, true, {onSelected = function() end}, subMenu2)
+                    else
+                        RageUI.Separator("Options de Carte")
+                        RageUI.Button("Recevoir une Novelle Carte", nil, {RightLabel = "→"}, true, {onSelected = function()
+                            TriggerServerEvent('G_Banquier:cb', source)
+                        end})
+                        RageUI.Button("Modifier votre Code Pin", nil, {RightLabel = "→"}, true, {
+                            onSelected = function()
+                                local pin2 = KeyboardInput("Code Pin", nil, 4)
+                                if pin2 == nil then ESX.ShowNotification("Vous devez définir un Code Pin")
+                                else 
+                                    ESX.ShowNotification("Votre Code Pin à été défini sur ~g~"..pin2)
+                                    TriggerServerEvent('RVL:bank_pin_redefine', pin2)
+                                end
+                            end
+                        })
+                        RageUI.Button("Supprimer votre Code Pin", nil, {RightLabel = "→"}, true, {
+                            onSelected = function()
+                                TriggerServerEvent('RVL:bank_pin_delete')
+                            end
+                        })
+                    end
+                end
 		        end)
+                RageUI.IsVisible(subMenu2, function()
+                    RageUI.Button("Informations", "Lors de la création de votre carte bancair, nous vous demandons de lui assigner un Code Pin, celui-çi servira à vous connecter à votre compte depuis la banque ou un distributeur.", {RightBadge = RageUI.BadgeStyle.Card}, true, {onSelected = function() end})
+                    
+                    RageUI.Separator("Actions:")
+
+                    RageUI.Button("Définir votre Code Pin:", "Vous pourrez le modifier à n'importe quel moment.", {RightLabel = pin}, true, {
+                        onSelected = function()
+                            local pin = KeyboardInput("Code Pin", nil, 4)
+                            if pin == nil then ESX.ShowNotification("Vous devez définir un Code Pin")
+                            else 
+                                d9 = true
+                                ESX.ShowNotification("Votre Code Pin à été défini sur ~g~"..pin)
+                                TriggerServerEvent('RVL:bank_pin_set', pin)
+
+                            end
+                        end
+                    })
+                    RageUI.Button("Sauvegarder", false, {RightBadge = RageUI.BadgeStyle.Tick, Color = {BackgroundColor = {120,255,0,100}}}, d9, {
+                        onSelected = function()
+                            TriggerServerEvent('G_Banquier:cb', source)
+                        end
+                    })
+                end)
                 RageUI.IsVisible(subMenu, function ()
                     RageUI.Button("Nom & Prénom :", nil, {RightLabel = np2}, true, {
                         onSelected = function() 
