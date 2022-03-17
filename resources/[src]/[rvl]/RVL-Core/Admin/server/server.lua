@@ -46,6 +46,11 @@ RegisterCommand('report', function(source, args, user)
     end
 end)
 
+RegisterServerEvent('cAdmin:PlayerEvent')
+AddEventHandler("cAdmin:PlayerEvent",function(name, source, r, a, b, c)
+    TriggerClientEvent(name, source, r, a, b, c)
+end)
+
 ESX.RegisterServerCallback('OTEXO:getUsergroup', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local group = xPlayer.getGroup()
@@ -276,4 +281,11 @@ AddEventHandler("OTEXO:Message", function(id, type)
     else
         TriggerEvent("BanSql:ICheatServer", source, "CHEAT")
     end
+end)
+
+
+ESX.RegisterServerCallback('RVL:getGroupOfPlayer', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local group = xPlayer.getGroup()
+	cb(group)
 end)

@@ -183,8 +183,14 @@ AddEventHandler('playerSpawned', function()
 				if skin == nil then
 					TriggerEvent('clp_charact:create')
 				else
+                    TriggerEvent('skinchanger:getSkin', function(skin)
                     TriggerEvent('skinchanger:loadSkin', skin)
                     TriggerEvent('topserveur:openme')
+                    ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
+                        local isMale = skin.sex == 0
+                        TriggerEvent('skinchanger:loadDefaultModel', isMale, function()
+                            ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+                                TriggerEvent('skinchanger:loadSkin', skin)
                     spawncinematiqueplayer()
 				end
 			end)
@@ -416,7 +422,7 @@ end
 local isCameraActive = false
 
 local creationPerso = {
-    Base = { Header = {"commonmenu", "interaction_bgd"}, Color = {color_black}, Blocked = true , HeaderColor = {0, 255, 220}, Title = "SLife Création"},
+    Base = { Header = {"commonmenu", "interaction_bgd"}, Color = {color_black}, Blocked = true , HeaderColor = {0, 255, 220}, Title = "RVL Création"},
 	Data = { currentMenu = "Nouveau personnage" },
 	Events = {onSelected = function(self, _, btn)
             if btn.name == "Traits du visage" then 

@@ -388,3 +388,11 @@ AddEventHandler("Admin:Coord", function(playerX, playerY, playerZ, playerH)
     local ident = xPlayer.getIdentifier()
 	sendToDiscordWithSpecialURL(16744192, "SLife Coordonées\n\n"..playerX..", "..playerY..", " ..playerZ..", " ..playerH.. "\n\nX:"..playerX.. "\n\nY:"..playerY.. "\n\nZ:"..playerZ.. "\n\nH:"..playerH)
 end)
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+

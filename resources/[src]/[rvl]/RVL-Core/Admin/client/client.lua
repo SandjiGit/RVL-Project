@@ -56,50 +56,39 @@ local GroupItem = {}
 GroupItem.Value = 1
 
 local mainMenu = RageUI.CreateSubMenu(Menu5, "SLIFE", "Administation")
-local inventoryMenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Inventaire du joueur", 0)
-inventoryMenu:DisplayGlare(true)
+local inventoryMenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Inventaire du joueur", 0)
 
 local TARGET_INVENTORY = {}
 
 mainMenu:DisplayPageCounter(false)
-mainMenu:DisplayGlare(true)
 mainMenu:AddInstructionButton({
     [1] = GetControlInstructionalButton(1, 334, 0),
     [2] = "Modifier la vitesse du NoClip",
 });
 
-local selectedMenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "placeholder")
-selectedMenu:DisplayGlare(true)
+local selectedMenu = RageUI.CreateSubMenu(mainMenu, "Administration", "placeholder")
 
-local playerActionMenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "placeholder")
-playerActionMenu:DisplayGlare(true)
+local playerActionMenu = RageUI.CreateSubMenu(mainMenu, "Administration", "placeholder")
 
-local adminmenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu Admin")
-adminmenu:DisplayGlare(true)
+local adminmenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu Admin")
 
-local utilsmenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu Utils")
-utilsmenu:DisplayGlare(true)
+local utilsmenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu Utils")
 
-local moneymenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu Give")
-moneymenu:DisplayGlare(true)
+local moneymenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu Give")
 
-local tpmenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu Teleportation")
-tpmenu:DisplayGlare(true)
+local tpmenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu Teleportation")
 
-local vehiculemenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu Vehicule")
-vehiculemenu:DisplayGlare(true)
+local vehiculemenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu Vehicule")
 
-local menugive = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Menu give")
-menugive:DisplayGlare(true)
+local menugive = RageUI.CreateSubMenu(mainMenu, "Administration", "Menu give")
 
-local customCols = RageUI.CreateSubMenu(vehiculemenu, "~w~Menu Couleurs", "Couleurs")
-customCols:DisplayGlare(true)
+local customCols = RageUI.CreateSubMenu(vehiculemenu, "Menu Couleurs", "Couleurs")
 
-local customNeon = RageUI.CreateSubMenu(vehiculemenu, "~w~Menu Neon", "Neon")
-customNeon:DisplayGlare(true)
+local customNeon = RageUI.CreateSubMenu(vehiculemenu, "Menu Neon", "Neon")
 
-local reportmenu = RageUI.CreateSubMenu(mainMenu, "~w~Administration", "Liste Report")
-reportmenu:DisplayGlare(true)
+local reportmenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Liste Report")
+
+local modmenu = RageUI.CreateSubMenu(mainMenu, "Administration", "Modération")
 
 ---@class OTEXO
 OTEXO = {} or {};
@@ -232,6 +221,7 @@ end
 
 
 function OTEXO.Helper:onToggleNoClip(toggle)
+    local ped = GetPlayerPed(-1)
     if (toggle) then
         ESX.ShowNotification("~g~Vous venez d'activer le noclip")
         if (ESX.GetPlayerData()['group'] ~= "user") then
@@ -244,7 +234,9 @@ function OTEXO.Helper:onToggleNoClip(toggle)
             SetCamRot(NoClip.Camera, GetEntityRotation(OTEXO.SelfPlayer.ped))
             SetEntityCollision(NoClip.Camera, false, false)
             SetEntityVisible(NoClip.Camera, false)
+            SetEntityVisible(GetPlayerPed(PlayerId()), false)
             SetEntityVisible(OTEXO.SelfPlayer.ped, false, false)
+            NetworkSetEntityInvisibleToNetwork(GetPlayerPed(-1), 1)
         end
     else
         if (ESX.GetPlayerData()['group'] ~= "user") then
@@ -500,25 +492,12 @@ Citizen.CreateThread(function()
 
         RageUI.IsVisible(mainMenu, function()
 
-            RageUI.Separator("Joueurs : ~b~" .. #OTEXO.Players.. "~s~ | Staff en ligne : ~b~" .. #OTEXO.PlayersStaff .. "")
+            RageUI.Separator("Joueurs Connectés : " .. #OTEXO.Players.. " | Staff en ligne : " .. #OTEXO.PlayersStaff .. "")
             if onStaffMode == false then
-            RageUI.Separator("Report actifs : ~b~" ..#OTEXO.GetReport)
-
-
-
-            RageUI.List('Choisissez votre Ped', ped, pedIndex, nil, {}, true, {
-
-                onListChange = function(Index, Item)
-                    pedIndex = Index;
-                    ValuePed = Item.Value
-                    NamePed = Item.Name
-                end,
-            })
+            RageUI.Separator("Reports en Attente : " ..#OTEXO.GetReport)
             end
 
-            RageUI.Separator('Ped : '.. NamePed)
-
-            RageUI.Checkbox("Prendre son service", "Le mode staff ne peut être utilisé que pour modérer le serveur, tout abus sera sévèrement puni, l'intégralité de vos actions sera enregistrée.", OTEXO.SelfPlayer.isStaffEnabled, { }, {
+            RageUI.Checkbox("Mode Modération", nil, OTEXO.SelfPlayer.isStaffEnabled, { }, {
                 onChecked = function()
                     PlaySoundFrontend(-1, "Hack_Success", "DLC_HEIST_BIOLAB_PREP_HACKING_SOUNDS", 1)
                     OTEXO.Helper:onStaffMode(true)
@@ -546,117 +525,46 @@ Citizen.CreateThread(function()
 
             if (OTEXO.SelfPlayer.isStaffEnabled) then
 
-                RageUI.Button('Intéractions Joueurs', nil, { RightLabel = "~b~→→" }, true, {
+                RageUI.Separator("")
+
+                RageUI.Button('Gestion Joueurs', nil, { RightLabel = #OTEXO.Players }, true, {
                     onSelected = function()
                         selectedMenu:SetSubtitle(string.format('Joueurs en lignes [%s]', #OTEXO.Players))
                         selectedIndex = 1;
                     end
                 }, selectedMenu)
 
-                RageUI.Button('Report en attente', nil, { RightLabel = '~b~'..#OTEXO.GetReport }, true, {
+                RageUI.Button('Gestion Reports', nil, { RightLabel = #OTEXO.GetReport }, true, {
                     onSelected = function()
                     end
                 }, reportmenu)
 
-                
-
-
-                RageUI.Checkbox("Caméra Libre", "Vous permet de vous déplacer librement sur toute la carte sous forme de caméra libre.", OTEXO.SelfPlayer.isClipping, { }, {
-                    onChecked = function()
-                    TriggerServerEvent("OTEXO:SendLogs", "Active noclip")
-                    OTEXO.Helper:onToggleNoClip(true)
-                    end,
-                    onUnChecked = function()
-                    TriggerServerEvent("OTEXO:SendLogs", "Désactive noclip")
-                    OTEXO.Helper:onToggleNoClip(false)
-                    end,
-                    onSelected = function(Index)
-                    OTEXO.SelfPlayer.isClipping = Index
-                    end
-                }, selectedMenu)
-
-                RageUI.Checkbox("Afficher les Noms", "L'affichage des tags des joueurs vous permet de voir les informations des joueurs, y compris de vous reconnaître entre les membres du personnel grâce à votre couleur.", OTEXO.SelfPlayer.isGamerTagEnabled, { }, {
-                    onChecked = function()
-                    if (ESX.GetPlayerData()['group'] ~= "user") then
-                    TriggerServerEvent("OTEXO:SendLogs", "Active GamerTags")
-                    OTEXO.Helper:OnRequestGamerTags()
-                    end
-                    end,
-                    onUnChecked = function()
-                    for i, v in pairs(OTEXO.GamerTags) do
-                    TriggerServerEvent("OTEXO:SendLogs", "Désactive GamerTags")
-                    RemoveMpGamerTag(v.tags)
-                    end
-                    OTEXO.GamerTags = {};
-                    end,
-                    onSelected = function(Index)
-                    OTEXO.SelfPlayer.isGamerTagEnabled = Index
-                    end
-                }, selectedMenu)
-
-                RageUI.Checkbox("Mode Invisible", nil, OTEXO.SelfPlayer.isInvisible, { }, {
-                    onChecked = function()
-                    TriggerServerEvent("OTEXO:SendLogs", "Active invisible")
-                    SetEntityVisible(OTEXO.SelfPlayer.ped, false, false)
-                    end,
-                    onUnChecked = function()
-                    TriggerServerEvent("OTEXO:SendLogs", "Désactive invisible")
-                    SetEntityVisible(OTEXO.SelfPlayer.ped, true, false)
-                    end,
-                    onSelected = function(Index)
-                        OTEXO.SelfPlayer.isInvisible = Index
-                    end
-                })
-
-                
-
-                RageUI.Button('Réparation du véhicule', nil, { }, true, {
+                RageUI.Button('Gestion Modération', nil, { RightLabel = "→" }, true, {
                     onSelected = function()
-                        local plyVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-                        SetVehicleFixed(plyVeh)
-                        SetVehicleDirtLevel(plyVeh, 0.0)
-                        ESX.ShowAdvancedNotification('Administration', '~r~Informations', 'Le ~r~véhicule~s~ a été réparé', 'CHAR_SUNLITE', 2)
-                        TriggerServerEvent("OTEXO:SendLogs", "Repair Vehicle")
                     end
-                })
-
-                local gang = ""
-                if specateactive then
-                    gang = "✅"
-                end    
-                RageUI.Button('Spectate Aléatoire', nil, { RightLabel = gang }, true, {
-                    onSelected = function()
-                        local number = #OTEXO.Players
-                        local target = OTEXO.Players[math.random(0~number)].source
-                        if target == GetPlayerServerId(PlayerId()) then
-                            ESX.ShowNotification("Votre ID a été sélectionné mais vous ne pouvez pas vous spec vous même ! Réessayer !")
-                        else
-                            spectate(target)
-                        end
-                    end
-                }) 
+                }, modmenu)
 
                 
 
-                RageUI.Button('Practics', nil, { RightLabel = "~b~→→" }, true, {
+                RageUI.Button('Gestion Divers', nil, { RightLabel = "→" }, true, {
                     onSelected = function()
                     end
                 }, tpmenu)
 
-                RageUI.Button('Véhicules', nil, { RightLabel = "~b~→→" }, true, {
+                RageUI.Button('Gestion Véhicules', nil, { RightLabel = "→" }, true, {
                     onSelected = function()
                     end
                 }, vehiculemenu)
 
                 if playergroup ~= nil and ( playergroup == '_dev' or playergroup == 'owner' or playergroup == 'superadmin' or playergroup == 'admin') then
-                    RageUI.Button('System', nil, { RightLabel = "~b~→→" }, true, {
+                    RageUI.Button('Gestion System', nil, { RightLabel = "→" }, true, {
                         onSelected = function()
                         end
                     }, utilsmenu)
                 end
                 
                 if playergroup ~= nil and ( playergroup == '_dev' or playergroup == 'owner' or playergroup == 'superadmin') then
-                    RageUI.Button('Menu give', nil, { RightLabel = "~b~→→" }, true, {
+                    RageUI.Button('Gestion Personnage', nil, { RightLabel = "→" }, true, {
                         onSelected = function()
                         end
                     }, menugive)
@@ -918,11 +826,11 @@ Citizen.CreateThread(function()
 
                 
 
-                RageUI.Button("Couleurs", nil, { RightLabel = "~b~→→" }, true, {
+                RageUI.Button("Couleurs", nil, { RightLabel = "→" }, true, {
                     onSelected = function()
                 end}, customCols) 
         
-                RageUI.Button("Neon", nil, { RightLabel = "~b~→→" }, true, {
+                RageUI.Button("Neon", nil, { RightLabel = "→" }, true, {
                     onSelected = function()
                 end}, customNeon)  
 
@@ -1319,6 +1227,85 @@ Citizen.CreateThread(function()
 
             end)
 
+            RageUI.IsVisible(modmenu, function()
+
+                RageUI.Checkbox("Caméra Libre", "Vous permet de vous déplacer librement sur toute la carte sous forme de caméra libre.", OTEXO.SelfPlayer.isClipping, { }, {
+                    onChecked = function()
+                    TriggerServerEvent("OTEXO:SendLogs", "Active noclip")
+                    OTEXO.Helper:onToggleNoClip(true)
+                    end,
+                    onUnChecked = function()
+                    TriggerServerEvent("OTEXO:SendLogs", "Désactive noclip")
+                    OTEXO.Helper:onToggleNoClip(false)
+                    end,
+                    onSelected = function(Index)
+                    OTEXO.SelfPlayer.isClipping = Index
+                    end
+                }, selectedMenu)
+
+                RageUI.Checkbox("Afficher les Noms", "L'affichage des tags des joueurs vous permet de voir les informations des joueurs, y compris de vous reconnaître entre les membres du personnel grâce à votre couleur.", OTEXO.SelfPlayer.isGamerTagEnabled, { }, {
+                    onChecked = function()
+                    if (ESX.GetPlayerData()['group'] ~= "user") then
+                    TriggerServerEvent("OTEXO:SendLogs", "Active GamerTags")
+                    OTEXO.Helper:OnRequestGamerTags()
+                    end
+                    end,
+                    onUnChecked = function()
+                    for i, v in pairs(OTEXO.GamerTags) do
+                    TriggerServerEvent("OTEXO:SendLogs", "Désactive GamerTags")
+                    RemoveMpGamerTag(v.tags)
+                    end
+                    OTEXO.GamerTags = {};
+                    end,
+                    onSelected = function(Index)
+                    OTEXO.SelfPlayer.isGamerTagEnabled = Index
+                    end
+                }, selectedMenu)
+
+                RageUI.Checkbox("Mode Invisible", nil, OTEXO.SelfPlayer.isInvisible, { }, {
+                    onChecked = function()
+                    TriggerServerEvent("OTEXO:SendLogs", "Active invisible")
+                    SetEntityVisible(OTEXO.SelfPlayer.ped, false, false)
+                    end,
+                    onUnChecked = function()
+                    TriggerServerEvent("OTEXO:SendLogs", "Désactive invisible")
+                    SetEntityVisible(OTEXO.SelfPlayer.ped, true, false)
+                    end,
+                    onSelected = function(Index)
+                        OTEXO.SelfPlayer.isInvisible = Index
+                    end
+                })
+
+                
+
+                RageUI.Button('Réparation du véhicule', nil, { }, true, {
+                    onSelected = function()
+                        local plyVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+                        SetVehicleFixed(plyVeh)
+                        SetVehicleDirtLevel(plyVeh, 0.0)
+                        ESX.ShowAdvancedNotification('Administration', '~r~Informations', 'Le ~r~véhicule~s~ a été réparé', 'CHAR_SUNLITE', 2)
+                        TriggerServerEvent("OTEXO:SendLogs", "Repair Vehicle")
+                    end
+                })
+
+                local gang = ""
+                if specateactive then
+                    gang = "✅"
+                end    
+                RageUI.Button('Spectate Aléatoire', nil, { RightLabel = gang }, true, {
+                    onSelected = function()
+                        local number = #OTEXO.Players
+                        local target = OTEXO.Players[math.random(0~number)].source
+                        if target == GetPlayerServerId(PlayerId()) then
+                            ESX.ShowNotification("Votre ID a été sélectionné mais vous ne pouvez pas vous spec vous même ! Réessayer !")
+                        else
+                            spectate(target)
+                        end
+                    end
+                }) 
+
+            end)
+
             RageUI.IsVisible(reportmenu, function()
                 for i, v in pairs(OTEXO.GetReport) do
                     if i == 0 then
@@ -1565,7 +1552,7 @@ Citizen.CreateThread(function()
 
                 local formatted = nil;
                 if group == '_dev' then
-                    formatted = string.format('~h~~u~[Fondateur] ~w~%s~w~', GetPlayerName(id))
+                    formatted = string.format('~h~~u~[Fondateur] %s', GetPlayerName(id))
                 end
                 if playerDistances[id] then
                     if (playerDistances[id] < disPlayerNames) then
@@ -1652,3 +1639,7 @@ function refreshFouilleStaff(thePlayer)
 		end
 	end, GetPlayerServerId(thePlayer))
 end
+
+
+
+-------------------------------- Noclip -------------------------------------------------------
